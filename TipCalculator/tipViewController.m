@@ -69,8 +69,8 @@
     float totalAmount = billAmount + tipAmount;
     
     [self.tipLabelField setText:[NSString stringWithFormat:@"$%0.2f", tipAmount]];
-    //[self.totalLabelField setText:[NSString stringWithFormat:@"$%0.2f", totalAmount]];
-    [self.totalLabelField setText:[NSString stringWithFormat:@"$%d", (int)(totalAmount+1)]];
+    [self.totalLabelField setText:[NSString stringWithFormat:@"$%0.2f", totalAmount]];
+    //[self.totalLabelField setText:[NSString stringWithFormat:@"$%d", (int)(totalAmount+1)]];
 }
 
 - (void) onSettingsButton {
