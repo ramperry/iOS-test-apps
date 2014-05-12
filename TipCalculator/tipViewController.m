@@ -15,10 +15,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *tipLabelField;
 @property (strong, nonatomic) IBOutlet UILabel *totalLabelField;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *tipControl;
+@property BOOL roundUpReqd;
 - (IBAction)onTap:(id)sender;
 - (void) updateValues;
 - (void) onSettingsButton;
-- (int) loadSettings;
+- (int) getSelectedSegmentIndex;
+- (BOOL) isRoundUpNeeded;
 @end
 
 @implementation tipViewController
@@ -48,10 +50,10 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    NSLog(@"view will appear");
-    int selectedIndex = [self loadSettings];
-    NSLog(@"sel ind : %d", selectedIndex);
+    int selectedIndex = [self getSelectedSegmentIndex];
     [self.tipControl setSelectedSegmentIndex:selectedIndex];
+    self.roundUpReqd = [self isRoundUpNeeded];
+    
 
 }
 
@@ -69,8 +71,13 @@
     float totalAmount = billAmount + tipAmount;
     
     [self.tipLabelField setText:[NSString stringWithFormat:@"$%0.2f", tipAmount]];
-    [self.totalLabelField setText:[NSString stringWithFormat:@"$%0.2f", totalAmount]];
-    //[self.totalLabelField setText:[NSString stringWithFormat:@"$%d", (int)(totalAmount+1)]];
+    if([self roundUpReqd]){
+        [self.totalLabelField setText:[NSString stringWithFormat:@"$%d", (int)(totalAmount+1)]];
+    }
+    else{
+        [self.totalLabelField setText:[NSString stringWithFormat:@"$%0.2f", totalAmount]];
+    }
+    
 }
 
 - (void) onSettingsButton {
@@ -78,11 +85,16 @@
 }
 
 
-- (int) loadSettings {
+- (int) getSelectedSegmentIndex {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     int intValue = [defaults integerForKey:@"selectedTipIndex"];
-    NSLog(@"default Index : %d", intValue);
     return intValue;
+}
+
+- (BOOL) isRoundUpNeeded {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    int intValue = [defaults integerForKey:@"roundUpTotal"];
+    return ((intValue)?YES:NO);
 }
 
 @end

@@ -15,6 +15,8 @@
 @interface SettingsViewController ()
 // The delegate and data source object for the UITableView
 @property (strong, nonatomic) TipOptionsTable *tipDelegate;
+@property (weak, nonatomic) IBOutlet UISwitch *roundUpToggle;
+- (IBAction)roundUpEnable:(id)sender;
 
 @end
 
@@ -50,6 +52,7 @@
     [self.tipOptions setDelegate:self.tipDelegate];
     [self.tipOptions setDataSource:self.tipDelegate];
     
+    [self.roundUpToggle setOn:[self loadRoundUpSettings]];
     // Add them to the view
     [self.view addSubview:self.tipOptions];
     [self.view addSubview:self.optionLabel];
@@ -63,4 +66,21 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void) saveRoundUpSettings:(int)index {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setInteger:index forKey:@"roundUpTotal"];
+    [defaults synchronize];
+}
+
+- (BOOL) loadRoundUpSettings{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    int switchOn = [defaults integerForKey:@"roundUpTotal"];
+    return ((switchOn)?YES:NO);
+    
+}
+
+- (IBAction)roundUpEnable:(id)sender {
+    BOOL switchOn = self.roundUpToggle.on;
+    [self saveRoundUpSettings:((switchOn)? 1 : 0)];
+}
 @end

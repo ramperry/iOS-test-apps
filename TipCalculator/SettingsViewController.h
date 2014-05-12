@@ -11,5 +11,4 @@
 @interface SettingsViewController : UIViewController
 @property (strong, nonatomic) UITableView *tipOptions;
 @property (strong, nonatomic) IBOutlet UILabel *optionLabel;
-
 @end
